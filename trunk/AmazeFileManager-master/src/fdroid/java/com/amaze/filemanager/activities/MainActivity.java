@@ -402,43 +402,8 @@ public class MainActivity extends BaseActivity implements
         }
 
         if (savedInstanceState == null) {
+            ifNullSavedInstanceState()
 
-            if (openprocesses) {
-                android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.content_frame, new ProcessViewer(), KEY_INTENT_PROCESS_VIEWER);
-                //   transaction.addToBackStack(null);
-                select = 102;
-                openprocesses = false;
-                //title.setText(utils.getString(con, R.string.process_viewer));
-                //Commit the transaction
-                transaction.commit();
-                supportInvalidateOptionsMenu();
-            }  else if (intent.getAction() != null &&
-                    intent.getAction().equals(TileService.ACTION_QS_TILE_PREFERENCES)) {
-                // tile preferences, open ftp fragment
-
-                android.support.v4.app.FragmentTransaction transaction2 = getSupportFragmentManager().beginTransaction();
-                transaction2.replace(R.id.content_frame, new FTPServerFragment());
-                findViewById(R.id.lin).animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-
-                select = -2;
-                adapter.toggleChecked(false);
-                transaction2.commit();
-            } else {
-                if (path != null && path.length() > 0) {
-                    HFile file = new HFile(OpenMode.UNKNOWN, path);
-                    file.generateMode(this);
-                    if (file.isDirectory())
-                        goToMain(path);
-                    else {
-                        goToMain("");
-                        utils.openFile(new File(path), this);
-                    }
-                } else {
-                    goToMain("");
-
-                }
-            }
         } else {
             COPY_PATH = savedInstanceState.getParcelableArrayList("COPY_PATH");
             MOVE_PATH = savedInstanceState.getParcelableArrayList("MOVE_PATH");
@@ -452,14 +417,51 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
+    private void ifNullSavedInstanceState() {
+        if (openprocesses) {
+            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.content_frame, new ProcessViewer(), KEY_INTENT_PROCESS_VIEWER);
+            //   transaction.addToBackStack(null);
+            select = 102;
+            openprocesses = false;
+            //title.setText(utils.getString(con, R.string.process_viewer));
+            //Commit the transaction
+            transaction.commit();
+            supportInvalidateOptionsMenu();
+        }  else if (intent.getAction() != null &&
+                intent.getAction().equals(TileService.ACTION_QS_TILE_PREFERENCES)) {
+            // tile preferences, open ftp fragment
+
+            android.support.v4.app.FragmentTransaction transaction2 = getSupportFragmentManager().beginTransaction();
+            transaction2.replace(R.id.content_frame, new FTPServerFragment());
+            findViewById(R.id.lin).animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+
+            select = -2;
+            adapter.toggleChecked(false);
+            transaction2.commit();
+        } else {
+            if (path != null && path.length() > 0) {
+                HFile file = new HFile(OpenMode.UNKNOWN, path);
+                file.generateMode(this);
+                if (file.isDirectory())
+                    goToMain(path);
+                else {
+                    goToMain("");
+                    utils.openFile(new File(path), this);
+                }
+            } else {
+                goToMain("");
+
+            }
+        }
+    }
     /**
      * Initializes an interactive shell, which will stay throughout the app lifecycle
      * The shell is associated with a handler thread which maintain the message queue from the
      * callbacks of shell as we certainly cannot allow the callbacks to run on same thread because
      * of possible deadlock situation and the asynchronous behaviour of LibSuperSU
      */
-    private void initializeInteractiveShell() {
-
+        private void initializeInteractiveShell() {
         // only one looper can be associated to a thread. So we're making sure not to create new
         // handler threads every time the code relaunch.
 
