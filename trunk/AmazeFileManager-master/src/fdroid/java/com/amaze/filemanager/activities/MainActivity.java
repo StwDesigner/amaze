@@ -301,39 +301,93 @@ public class MainActivity extends BaseActivity implements
         path = getIntent().getStringExtra("path");
         openprocesses = getIntent().getBooleanExtra(KEY_INTENT_PROCESS_VIEWER, false);
         try {
-            intent = getIntent();
-            if (intent.getStringArrayListExtra("failedOps") != null) {
-                ArrayList<BaseFile> failedOps = intent.getParcelableArrayListExtra("failedOps");
-                if (failedOps != null) {
-                    mainActivityHelper.showFailedOperationDialog(failedOps, intent.getBooleanExtra("move", false), this);
-                }
-            }
-            if (intent.getAction() != null) {
-
-                if (intent.getAction().equals(Intent.ACTION_GET_CONTENT)) {
-
-                    // file picker intent
-                    mReturnIntent = true;
-                    Toast.makeText(this, getString(R.string.pick_a_file), Toast.LENGTH_LONG).show();
-                } else if (intent.getAction().equals(RingtoneManager.ACTION_RINGTONE_PICKER)) {
-                    // ringtone picker intent
-                    mReturnIntent = true;
-                    mRingtonePickerIntent = true;
-                    Toast.makeText(this, getString(R.string.pick_a_file), Toast.LENGTH_LONG).show();
-                } else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
-
-                    // zip viewer intent
-                    Uri uri = intent.getData();
-                    openzip = true;
-                    zippath = uri.toString();
-                }
-            }
+            tryOnCreate();
         } catch (Exception e) {
 
         }
         updateDrawer();
 
         // setting window background color instead of each item, in order to reduce pixel overdraw
+        settingOnCreate();
+
+        if (getAppTheme().equals(AppTheme.DARK)) {
+            mDrawerList.setBackgroundColor(ContextCompat.getColor(this, R.color.holo_dark_background));
+        }
+        mDrawerList.setDivider(null);
+        if (!isDrawerLocked) {
+            mDrawerToggle = new ActionBarDrawerToggle(
+                    this,                  /* host Activity */
+                    mDrawerLayout,         /* DrawerLayout object */
+                    R.drawable.ic_drawer_l,  /* nav drawer image to replace 'Up' caret */
+                    R.string.drawer_open,  /* "open drawer" description for accessibility */
+                    R.string.drawer_close  /* "close drawer" description for accessibility */
+            ) {
+                public void onDrawerClosed(View view) {
+                    mainActivity.onDrawerClosed();
+                }
+
+                public void onDrawerOpened(View drawerView) {
+                    //title.setText("Amaze File Manager");
+                    // creates call to onPrepareOptionsMenu()
+                }
+            };
+            mDrawerLayout.setDrawerListener(mDrawerToggle);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_drawer_l);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            mDrawerToggle.syncState();
+        }/*((ImageButton) findViewById(R.id.drawer_buttton)).setOnClickListener(new ImageView.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mDrawerLayout.isDrawerOpen(mDrawerLinear)) {
+                    mDrawerLayout.closeDrawer(mDrawerLinear);
+                } else mDrawerLayout.openDrawer(mDrawerLinear);
+            }
+        });*/
+        if (mDrawerToggle != null) {
+            mDrawerToggle.setDrawerIndicatorEnabled(true);
+            mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_drawer_l);
+        }
+        //recents header color implementation
+        if (Build.VERSION.SDK_INT >= 21) {
+            ActivityManager.TaskDescription taskDescription = new ActivityManager.TaskDescription("Amaze",
+                    ((BitmapDrawable) getResources().getDrawable(R.mipmap.ic_launcher)).getBitmap(),
+                    getColorPreference().getColor(ColorUsage.getPrimary(MainActivity.currentTab)));
+            ((Activity) this).setTaskDescription(taskDescription);
+        }
+    }
+
+    private void tryOnCreate(){
+        intent = getIntent();
+        if (intent.getStringArrayListExtra("failedOps") != null) {
+            ArrayList<BaseFile> failedOps = intent.getParcelableArrayListExtra("failedOps");
+            if (failedOps != null) {
+                mainActivityHelper.showFailedOperationDialog(failedOps, intent.getBooleanExtra("move", false), this);
+            }
+        }
+        if (intent.getAction() != null) {
+
+            if (intent.getAction().equals(Intent.ACTION_GET_CONTENT)) {
+
+                // file picker intent
+                mReturnIntent = true;
+                Toast.makeText(this, getString(R.string.pick_a_file), Toast.LENGTH_LONG).show();
+            } else if (intent.getAction().equals(RingtoneManager.ACTION_RINGTONE_PICKER)) {
+                // ringtone picker intent
+                mReturnIntent = true;
+                mRingtonePickerIntent = true;
+                Toast.makeText(this, getString(R.string.pick_a_file), Toast.LENGTH_LONG).show();
+            } else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
+
+                // zip viewer intent
+                Uri uri = intent.getData();
+                openzip = true;
+                zippath = uri.toString();
+            }
+        }
+    }
+
+    private void settingOnCreate(){
         if (getAppTheme().equals(AppTheme.LIGHT)) {
             /*if(Main.IS_LIST) {
 
@@ -395,52 +449,6 @@ public class MainActivity extends BaseActivity implements
             select = savedInstanceState.getInt("selectitem", 0);
             adapter.toggleChecked(select);
             //mainFragment = (Main) savedInstanceState.getParcelable("main_fragment");
-        }
-
-        if (getAppTheme().equals(AppTheme.DARK)) {
-            mDrawerList.setBackgroundColor(ContextCompat.getColor(this, R.color.holo_dark_background));
-        }
-        mDrawerList.setDivider(null);
-        if (!isDrawerLocked) {
-            mDrawerToggle = new ActionBarDrawerToggle(
-                    this,                  /* host Activity */
-                    mDrawerLayout,         /* DrawerLayout object */
-                    R.drawable.ic_drawer_l,  /* nav drawer image to replace 'Up' caret */
-                    R.string.drawer_open,  /* "open drawer" description for accessibility */
-                    R.string.drawer_close  /* "close drawer" description for accessibility */
-            ) {
-                public void onDrawerClosed(View view) {
-                    mainActivity.onDrawerClosed();
-                }
-
-                public void onDrawerOpened(View drawerView) {
-                    //title.setText("Amaze File Manager");
-                    // creates call to onPrepareOptionsMenu()
-                }
-            };
-            mDrawerLayout.setDrawerListener(mDrawerToggle);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_drawer_l);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(true);
-            mDrawerToggle.syncState();
-        }/*((ImageButton) findViewById(R.id.drawer_buttton)).setOnClickListener(new ImageView.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mDrawerLayout.isDrawerOpen(mDrawerLinear)) {
-                    mDrawerLayout.closeDrawer(mDrawerLinear);
-                } else mDrawerLayout.openDrawer(mDrawerLinear);
-            }
-        });*/
-        if (mDrawerToggle != null) {
-            mDrawerToggle.setDrawerIndicatorEnabled(true);
-            mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_drawer_l);
-        }
-        //recents header color implementation
-        if (Build.VERSION.SDK_INT >= 21) {
-            ActivityManager.TaskDescription taskDescription = new ActivityManager.TaskDescription("Amaze",
-                    ((BitmapDrawable) getResources().getDrawable(R.mipmap.ic_launcher)).getBitmap(),
-                    getColorPreference().getColor(ColorUsage.getPrimary(MainActivity.currentTab)));
-            ((Activity) this).setTaskDescription(taskDescription);
         }
     }
 
