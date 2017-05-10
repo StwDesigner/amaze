@@ -102,30 +102,25 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.9.2.3'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
     //FTP Server
-//        compile 'org.apache.mina:mina-core:2.0.13'
+    //        compile 'org.apache.mina:mina-core:2.0.13'
     //    compile 'org.apache.ftpserver:ftpserver-core:1.0.6'
     //    compile 'org.apache.ftpserver:ftplet-api:1.0.6'
-
     // https://mvnrepository.com/artifact/org.apache.mina/mina-core
-    compile group: 'org.apache.mina', name: 'mina-core', version: '2.0.13'
-
+    compile 'org.apache.mina:mina-core:2.0.13'
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
-
+    compile 'org.slf4j:slf4j-api:1.7.21'
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
-    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.21'
-
+    compile 'org.slf4j:slf4j-simple:1.7.21'
     //compile files('libs/ftplet-api-1.1.0-SNAPSHOT.jar')
     // https://mvnrepository.com/artifact/org.apache.ftpserver/ftplet-api
-    compile group: 'org.apache.ftpserver', name: 'ftplet-api', version: '1.1.0'
-
+    compile 'org.apache.ftpserver:ftplet-api:1.1.0'
     //compile files('libs/ftpserver-core-1.1.0-SNAPSHOT.jar')
     // https://mvnrepository.com/artifact/org.apache.ftpserver/ftpserver-core
-    compile group: 'org.apache.ftpserver', name: 'ftpserver-core', version: '1.1.0'
-
+    compile 'org.apache.ftpserver:ftpserver-core:1.1.0'
     //compile 'com.jcraft:jsch:0.1.53'
     compile 'com.android.volley:volley:1.0.0'
     compile 'eu.chainfire:libsuperuser:1.0.0.+'
+    compile 'com.google.android.gms:play-services:10.2.4'
 }
 
 def Properties props = new Properties()
