@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/Users/lucastante/Documents/software-designer-2/trunk/libs/StickyHeadersRecyclerView/src/main/assets"/><source path="/Users/lucastante/Documents/software-designer-2/trunk/libs/StickyHeadersRecyclerView/build/generated/assets/shaders/release"/></dataSet><dataSet config="release"><source path="/Users/lucastante/Documents/software-designer-2/trunk/libs/StickyHeadersRecyclerView/src/release/assets"/></dataSet></merger>
